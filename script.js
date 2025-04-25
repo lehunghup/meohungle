@@ -1,5 +1,6 @@
 let mediaData = [];
 let viewedItems = new Set(JSON.parse(localStorage.getItem('viewedItems') || '[]'));
+let isClosingModal = false; // Thêm cờ để theo dõi trạng thái đóng modal
 
 // Load CSV file from GitHub repository
 function loadCSV() {
@@ -111,8 +112,10 @@ function playVideo(url, title, id) {
   video.load();
 
   video.onerror = () => {
-    console.error(`Failed to load video: ${url}`);
-    alert('Failed to load video. Please check the URL or try another video.');
+    if (!isClosingModal) { // Chỉ hiển thị lỗi nếu không đang đóng modal
+      console.error(`Failed to load video: ${url}`);
+      alert('Failed to load video. Please check the URL or try another video.');
+    }
     closeModal();
   };
 
@@ -130,11 +133,13 @@ function playVideo(url, title, id) {
 function closeModal() {
   const modal = document.getElementById('videoModal');
   const video = document.getElementById('modalVideo');
+  isClosingModal = true; // Đặt cờ trước khi đóng
   video.pause();
   video.src = '';
   video.load();
   document.getElementById('videoTitle').textContent = '';
   modal.style.display = 'none';
+  isClosingModal = false; // Đặt lại cờ sau khi đóng
 }
 
 // Mark item as viewed/unviewed
