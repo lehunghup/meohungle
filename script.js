@@ -173,8 +173,11 @@ function sortMedia() {
 }
 
 // Close modal when clicking outside
+
 document.getElementById('videoModal').onclick = function (e) {
-  if (e.target === this) closeModal();
+
+  if (e.target === this) closeModal();
+
 };
 
 // Load CSV when the page loads
